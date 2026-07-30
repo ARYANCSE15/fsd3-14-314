@@ -16,7 +16,23 @@ const saveCart= async(cart) =>{
 const addTocart = async (product) =>{
     const cart = await getCart() ;
     const isFoundInCart = cart.find((item) => item.id === product.id) ;
+    if(isFoundInCart){
+        isFoundInCart.qty+=1;
+    }
+    else cart.push(product);
+    await saveCart(cart);
+    console.log(`${product.name}added/updated to 🛒`);
 } ;
+const displayCart=async()=>{
+    const cart =await getCart();
+    if(cart.length==0){
+        console.log("Cart is empty");
+        return;
+    }
+    console.table(cart);
+    const total=cart.reduce((sum,item)=> sum+item.price+item.qty,0);
+    console.log(`Total payable amout is ${total}`);
+}
 const main = async () => {
     let choice;
     const cin =readline.createInterface({input:stdin,output:stdout});
