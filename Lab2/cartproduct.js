@@ -1,71 +1,133 @@
-import readline from "readline/promises";
-import {stdin,stdout} from "process";
-import { readFile ,writeFile } from "fs/promises";
+import readLine from "readline/promises";
+import { stdin, stdout } from "process";
+import { readFile, writeFile } from "fs/promises";
+import { log } from "console";
 
 // Database using file starts
-const FILE="product.json";
-const getCart =async()=>{
-    const data =await readFile(FILE,"utf-8")
+const FILE = "cart.json";
+
+const getCart = async () => {
+    const data = await readFile(FILE, "utf-8");
     return JSON.parse(data);
-
 };
-const saveCart= async(cart) =>{
-    await writeFile(FILE,JSON.stringify(CaretPosition,null,2));
 
+const saveCart = async (cart) => {
+    await writeFile(FILE, JSON.stringify(cart, null, 2));
 };
-const addTocart = async (product) =>{
-    const cart = await getCart() ;
-    const isFoundInCart = cart.find((item) => item.id === product.id) ;
-    if(isFoundInCart){
-        isFoundInCart.qty+=1;
+
+const addToCart = async (product) => {
+    const cart = await getCart();
+
+    const isFoundInCart = cart.find((item) => item.id === product.id);
+
+    if (isFoundInCart) {
+        // Add the entered quantity
+        isFoundInCart.qty += product.qty;
+    } else {
+        cart.push(product);
     }
-    else cart.push(product);
+
     await saveCart(cart);
-    console.log(`${product.name}added/updated to 🛒`);
-} ;
-const displayCart=async()=>{
-    const cart =await getCart();
-    if(cart.length==0){
-        console.log("Cart is empty");
+    console.log(`${product.name} added/updated to 🛒`);
+};
+
+const displayCart = async () => {
+    const cart = await getCart();
+
+    if (cart.length === 0) {
+        console.log("🛒 is empty");
         return;
     }
+
     console.table(cart);
-    const total=cart.reduce((sum,item)=> sum+item.price+item.qty,0);
-    console.log(`Total payable amout is ${total}`);
+
+    // Correct total calculation
+    const total = cart.reduce(
+        (sum, item) => sum + item.price * item.qty,
+        0
+    );
+
+    console.log(`Total Payable Amount Rs. ${total}`);
+};
+const updateQuantity = async(product)=>{
+    const cart = await getCart();
+    const isFoundInCart = cart.find((item)=>item.id === product);
 }
+const removeProduct = async (pid) => {
+    const cart = await getCart();
+    // const isFoundInCart = cart.find((item) => item.id === pid);
+    let x = cart.length;
+    const newProducts = cart.filter((item) => item.id !== pid);
+    let y = newProducts.length;
+    if(x > y){
+        console.log(`Product with id ${pid} is removed from cart`);
+        await saveCart(newProducts);
+    }
+    else{
+        console.log(`Product with id ${pid} not found`);
+    }
+};
+
 const main = async () => {
     let choice;
-    const cin =readline.createInterface({input:stdin,output:stdout});
-    do{
-    console.log("Welcome to Amazon Shopping 🛒");
-    console.log("1...........Show Cart");
-    console.log("2...........Add Product");
-    console.log("3...........Remove Product");
-    console.log("4...........Update Quantity");
-    console.log("5...........Checkout");
-    choice =await cin.question("Enter your choice");
-    switch(Number(choice)){
-        case 1:
-            console.log("Show Cart");
-            break;
-            case 2:
-                console.log("Add Product");
-                break;
-                case 3:
-                    console.log("Remove Product");
-                    break;
-                    case 4:
-                        console.log("Update Quantity");
-                        break;
-                        case 5:
-                            console.log("Checkout");
-                            break;
-                            default:
-                                console.log("Invalid choice");
-                                break;
-    }
-    } while(choice!=5);
-    cin.close();
+    const cin = readLine.createInterface({
+        input: stdin,
+        output: stdout,
+    });
 
+    do {
+        console.log("\nWelcome to Amazon Shopping 🛒");
+        console.log("1......Show Cart");
+        console.log("2......Add Product");
+        console.log("3......Remove Product");
+        console.log("4......Update Quantity");
+        console.log("5......Checkout");
+
+        choice = Number(await cin.question("Enter your choice: "));
+
+        switch (choice) {
+            case 1:
+                await displayCart();
+                break;
+
+            case 2:
+                const item = await cin.question(
+                    "Enter id,name,price,qty: "
+                );
+
+                const [id, name, price, qty] = item
+                    .split(",")
+                    .map((p) => p.trim());
+
+                await addToCart({
+                    id: Number(id),
+                    name,
+                    price: Number(price),
+                    qty: Number(qty),
+                });
+                break;
+
+            case 3:
+                let pid = await cin.question(
+                    "Enter the id of product to remove: "
+                );
+                await removeProduct(Number(pid));               
+                break;
+
+            case 4:
+                console.log("Update Quantity");
+                break;
+
+            case 5:
+                console.log("Checkout");
+                break;
+
+            default:
+                console.log("Invalid Choice. Please try again.");
+        }
+    } while (choice !== 5);
+
+    cin.close();
 };
+
 main();
