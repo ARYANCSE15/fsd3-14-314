@@ -1,10 +1,10 @@
 import readline from "readline/promises";
 import {stdin,stdout} from "process";
-import { writeFile } from "fs";
+import { readFile ,writeFile } from "fs/promises";
 
 // Database using file starts
 const FILE="product.json";
-const getCart =()=>{
+const getCart =async()=>{
     const data =await readFile(FILE,"utf-8")
     return JSON.parse(data);
 
