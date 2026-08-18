@@ -1,8 +1,7 @@
 import http from "http";
-const server=http.createServer();
-server.on("request",(req,res)=>{
-    res.write("Welcome to server side programming")
-    res.end();
+const server=http.createServer((req,res)=>{
+    res.end("<h2>Welcome to the server</h2>");
+
 });
 server.listen(5000,()=>{
     console.log("Server is running");
