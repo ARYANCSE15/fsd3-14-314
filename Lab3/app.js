@@ -1,9 +1,30 @@
 import http from "http";
-import team from "./teams";
+import {getALLTeams} from "./teams.js";
+const PORT=5000;
+const sendJson =(res,statusCode,data)=>{
+    res.writeHead(statusCode,{"content-type":"application/json"});
+    res.end(data==="undefined"?"":JSON.stringify(data));
+};
+const parsoJSONBody=(req)=>{
+    new Promise((resolve,reject)=>{
+        let body="";
+        req.on("data",(chunk)=>{
+            body+= chunk.toString();
+        });
+        req.on("end",() => {
+            try{
+                resolve(body? JSON.parse(body): {});
+            }catch (error){
+                reject(error);
+            }
+        });
+    });
+};
 const server=http.createServer((req,res)=>{
-    res.end("<h2>SIH INTERNAL</h2>");
-
+    const{pathname,query}=parseUrl(req.url,true);
+    console.log(pathname);
+    console.log(query);
 });
-server.listen(5000,()=>{
-    console.log("Server is running");
+server.listen(PORT,()=>{
+    console.log("SIH Server is running at",PORT);
 });
