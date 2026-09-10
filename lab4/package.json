@@ -4,7 +4,8 @@
   "description": "1.Create Project folder\r 2.right click on project folder and select open integrated terminal\r 3.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev":"nodemon app.js"
   },
   "keywords": [],
   "author": "",
