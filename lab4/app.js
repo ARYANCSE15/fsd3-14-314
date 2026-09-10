@@ -1,15 +1,12 @@
 import http from "http";
-// import * as teams from "teams.js";
-import { getAllTeams, addTeam } from "./teams.js";
+import * as teams from "./teams.js";
+ //import { getAllTeams, addTeam } from "./teams.js";
 import { parse as parseUrl } from "url";
-
 const PORT = 5000;
-
 const sendJson = (res, statusCode, data, keyword, msg) => {
   res.writeHead(statusCode, { "content-type": "application/json" });
   res.end(data === "undefined" ? "" : JSON.stringify({ [keyword]: msg, data }));
 };
-
 const parseJSONBody = (req) => {
   return new Promise((resolve, reject) => {
     let body = "";
@@ -26,14 +23,12 @@ const parseJSONBody = (req) => {
     req.on("error", reject);
   });
 };
-
 const server = http.createServer(async (req, res) => {
   const { pathname, query } = parseUrl(req.url, true);
   const { method } = req;
   console.log("pathname:", pathname);
   console.log("query:", query);
   console.log("Method:", method);
-
   if (pathname === "/api/v1/teams" && method === "GET") {
     let teams = getAllTeams();
     return sendJson(res, 200, teams, "count", teams.length);
@@ -51,7 +46,6 @@ const server = http.createServer(async (req, res) => {
     res.end();
   }
 });
-
 server.listen(PORT, () => {
   console.log("SIH Server is running at ", PORT);
 });
