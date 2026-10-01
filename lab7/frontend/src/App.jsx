@@ -55,10 +55,10 @@ export default function App() {
     <h1>Online Book Store</h1>
     <div className="container">
 
-      <Book book={b1} />
-      <Book book={b2} />
-      <Book book={b1} />
-      <Book book={b2} />
+      <Book book={b1} /><button>OPEN BOOK</button> 
+      <Book book={b2} /><button>OPEN BOOK</button>
+      <Book book={b1} /><button>OPEN BOOK</button>
+      <Book book={b2} /><button>OPEN BOOK</button>
       </div>
     </>
   );
