@@ -23,3 +23,9 @@
     2.It must start with capital letter
     3.It should be traeted as html tag
     
+    object destructure
+    does not depends on order,if property is not available then it initialize with null
+    any components include styles
+    1. External CSS: Create class in index.css and use in components
+    2. Inline CSS: Create property as object 
+    Inline CSS:In this method we use the curly braces with style attribute all the css property must be single word 
