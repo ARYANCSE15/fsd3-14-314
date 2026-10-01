@@ -52,14 +52,14 @@ function Book(props) {
 export default function App() {
   return (
     <>
-      <h1>Hello React</h1>
+    <h1>Online Book Store</h1>
+    <div className="container">
 
       <Book book={b1} />
-      {/* <h1>Hello React</h1> */}
-
       <Book book={b2} />
       <Book book={b1} />
       <Book book={b2} />
+      </div>
     </>
   );
 }
