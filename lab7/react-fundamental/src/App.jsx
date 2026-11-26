@@ -4,6 +4,8 @@
 //component first character must be capital
 
 //function must return single element
+
+{/*
 function Hello(args){
   return (
     // <> </> : React fragments can be used to group multiple elements
@@ -93,19 +95,33 @@ export default function App()  {
     },
   ];
 
+
   return (
   <div>
     <h1>Hello React</h1>
     
     <Hello name = "Let us C" price = "355" author = "Yashavant Kanetkar"/>
-    {/*
+    
     <Hello />
     <Hello name = "Let us C++" price = "455" author = "Yashavant Kanetkar"/>
-    */}
-    {/*<Hello/>*/}
+ 
+    <Hello/>
     <Hello {...books[0]}/>
     {
       books.map((item) => <Hello{...item}/>)
     }
   </div>)
+}
+*/}
+
+
+import BookList from "./components/BookList";
+
+export default function App() {
+    return (
+        <>
+            <h1>Hello React</h1>
+            <BookList />
+        </>
+    );
 }
